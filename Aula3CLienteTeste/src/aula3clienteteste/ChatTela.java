@@ -48,6 +48,7 @@ public class ChatTela extends javax.swing.JFrame {
                     .lookup("rmi://localhost:8282/chat");
             Message msg = new Message(nomeEntrada, mensagemRobo);
             objChat.sendMessage(msg);
+            objChat.setRobotQuestion(mensagemRobo);
             Conversa.setText(returnMessage(objChat.retrieveMessage()));
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -185,8 +186,9 @@ public class ChatTela extends javax.swing.JFrame {
             IChatAula objChat = (IChatAula) Naming
                     .lookup("rmi://localhost:8282/chat");
             
-            List<Message> msgAtuais = objChat.retrieveMessage();
-            msgRobo = msgAtuais.get(msgAtuais.size()-1).getMessage();
+            // List<Message> msgAtuais = objChat.retrieveMessage();
+            // msgRobo = msgAtuais.get(msgAtuais.size()-1).getMessage();
+            msgRobo = objChat.getRobotQuestion();
             
             Message msg = new Message(nome, msgp);
             objChat.sendMessage(msg);
@@ -194,6 +196,16 @@ public class ChatTela extends javax.swing.JFrame {
             // Pegando a resposta do robô
             Message msgRobot = objChat.getRobotMessage(msgRobo, msgp);
             objChat.sendMessage(msgRobot);
+            
+            if (msgRobot.getMessage().contains("O status do seu pedido é")) {
+                objChat.sendMessage(new Message("Chatbot", "Deseja consultar mais algum pedido?"));
+                objChat.setRobotQuestion("Deseja consultar mais algum pedido?");
+            } else if (msgRobot.getMessage().contains("para consultar o status do seu pedido informe o número dele")) {
+                objChat.setRobotQuestion("Então para consultar o status do seu pedido informe o número dele");
+            } else if (msgRobot.getMessage().equals("Adeus")) {
+                System.exit(0);
+            }
+            
             Conversa.setText(returnMessage(objChat.retrieveMessage()));
         } catch (MalformedURLException e) {
             e.printStackTrace();

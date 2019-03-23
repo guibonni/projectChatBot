@@ -11,6 +11,8 @@ public class Message implements Serializable {
     private String user;
     private String message;
     
+    private static String msgBot = "";
+    
     private static List<Message> lstMessage = new ArrayList<Message>();
     
     public Message (String user, String message){
@@ -32,6 +34,14 @@ public class Message implements Serializable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public static String getMsgBot() {
+        return msgBot;
+    }
+
+    public static void setMsgBot(String msgBot) {
+        Message.msgBot = msgBot;
     }
     
     public static List<Message> getLstMessage() {
